@@ -1,54 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ZED Cost Calculator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:'Poppins',Arial,sans-serif;
+  background:#f4f6f8;
+}
+
+.box{
+  max-width:900px;
+  margin:20px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  position:relative;
+}
+
+/* WATERMARK */
+.watermark{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  opacity:0.07;
+  z-index:1;
+  pointer-events:none;
+}
+.watermark img{
+  width:320px;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  border-bottom:3px solid #f2c400;
+  padding-bottom:10px;
+  margin-bottom:15px;
+}
+.header img{height:60px;}
+.company-name{font-size:26px;font-weight:600;}
+.tagline{font-size:13px;color:#555;}
+
+label{font-weight:500;margin-top:12px;display:block;}
+
+input,select{
+  padding:8px;
+  margin-top:5px;
+  width:100%;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+
+/* CLIENT NAME */
+#client{
+  border:none;
+  border-bottom:2px solid #f2c400;
+  font-size:18px;
+  font-weight:500;
+  outline:none;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  font-size:14px;
+}
+th,td{
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:right;
+}
+th{background:#f9f3cc;}
+.left{text-align:left;}
+
+/* BUTTON */
+button{
+  background:#f2c400;
+  border:none;
+  padding:10px 18px;
+  font-weight:600;
+  margin-top:15px;
+  border-radius:5px;
+  cursor:pointer;
+}
+button:hover{background:#e0b300;}
+
+.note{font-size:12px;color:#555;margin-top:15px;}
+.footer{margin-top:20px;font-size:12px;color:#777;text-align:center;}
+
+@media print{
+  button{display:none;}
+  body{background:#fff;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <!-- WATERMARK -->
+  <div class="watermark">
+    <img src="logo.png" alt="Watermark">
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="logo.png" alt="Logo">
+    <div>
+      <div class="company-name">VALUE CONSULTING</div>
+      <div class="tagline">ISO • ZED • Lean • MSME Certification Support</div>
+    </div>
+  </div>
+
+  <h3>ZED Certification Cost Calculator</h3>
+
+  <label>Client Name</label>
+  <input type="text" id="client" placeholder="Enter Client Name">
+
+  <label>Milestone</label>
+  <select id="milestone" onchange="calc()">
+    <option value="Bronze">Bronze</option>
+    <option value="Silver" selected>Silver</option>
+    <option value="Gold">Gold</option>
+  </select>
+
+  <label>MSME Type</label>
+  <select id="msme" onchange="calc()">
+    <option value="Micro">Micro</option>
+    <option value="Small">Small</option>
+    <option value="Medium">Medium</option>
+  </select>
+
+  <label>Category</label>
+  <select id="cat" onchange="calc()">
+    <option value="Male">Male</option>
+    <option value="Women">Women</option>
+    <option value="SC">SC / ST / EWS</option>
+  </select>
+
+  <table>
+    <tr><th class="left">Particulars</th><th>Amount (₹)</th></tr>
+    <tr><td class="left">Actual Cost</td><td id="actual">0</td></tr>
+    <tr><td class="left">Central Subsidy</td><td id="central">0</td></tr>
+    <tr><td class="left">Balance After Central Subsidy</td><td id="bal">0</td></tr>
+    <tr><td class="left">State Govt Subsidy (50% excl. GST)</td><td id="state">0</td></tr>
+    <tr><th class="left">Final Client Payable</th><th id="final">0</th></tr>
+  </table>
+
+  <button onclick="downloadPDF()">Download Quotation (PDF)</button>
+
+  <p class="note">
+    <b>Note:</b> Subsidies are subject to approval & reimbursement by Government authorities.  
+    State subsidy is calculated on eligible amount excluding GST.
+  </p>
+
+  <div class="footer">
+    © Value Consulting | Indicative quotation for estimation purpose only
+  </div>
+
+</div>
+
 <script>
 function calc(){
- let level=document.getElementById("level").value;
- let msme=document.getElementById("msme")?.value || 
-          document.querySelector('input[name="msme"]:checked')?.value;
- let cat=document.getElementById("cat").value;
- let milestone=document.getElementById("milestone")?.value || level;
+  var milestone=document.getElementById("milestone").value;
+  var msme=document.getElementById("msme").value;
+  var cat=document.getElementById("cat").value;
 
- let HH=200000;
- let cert={
-  Bronze:8000,
-  Silver:32000,
-  Gold:72000
- }[milestone];
+  var HH=200000;
 
- let hhRate={
-  Micro:{Male:0.8,Women:0.9,SC:0.9},
-  Small:{Male:0.6,Women:0.7,SC:0.7},
-  Medium:{Male:0.5,Women:0.6,SC:0.6}
- };
+  var certCost={Bronze:8000,Silver:32000,Gold:72000};
 
- let certRate={
-  Micro:{Male:0.8,Women:1.0,SC:0.9},
-  Small:{Male:0.6,Women:1.0,SC:0.7},
-  Medium:{Male:0.5,Women:1.0,SC:0.6}
- };
+  var hhRate={
+    Micro:{Male:0.8,Women:0.9,SC:0.9},
+    Small:{Male:0.6,Women:0.7,SC:0.7},
+    Medium:{Male:0.5,Women:0.6,SC:0.6}
+  };
 
- let central = HH*hhRate[msme][cat] + cert*certRate[msme][cat];
- let balance = (HH+cert)-central;
- let state = (balance/1.18)*0.5;
- let final = balance - state;
+  var certRate={
+    Micro:{Male:0.8,Women:1.0,SC:0.9},
+    Small:{Male:0.6,Women:1.0,SC:0.7},
+    Medium:{Male:0.5,Women:1.0,SC:0.6}
+  };
 
- document.getElementById("actual").innerText=(HH+cert).toFixed(0);
- document.getElementById("central").innerText=central.toFixed(0);
- document.getElementById("bal").innerText=balance.toFixed(0);
- document.getElementById("state").innerText=state.toFixed(0);
- document.getElementById("final").innerText=final.toFixed(0);
+  var cert=certCost[milestone];
+
+  var central=(HH*hhRate[msme][cat])+(cert*certRate[msme][cat]);
+  var balance=(HH+cert)-central;
+  var state=(balance/1.18)*0.5;
+  var final=balance-state;
+
+  document.getElementById("actual").innerText=(HH+cert).toFixed(0);
+  document.getElementById("central").innerText=central.toFixed(0);
+  document.getElementById("bal").innerText=balance.toFixed(0);
+  document.getElementById("state").innerText=state.toFixed(0);
+  document.getElementById("final").innerText=final.toFixed(0);
 }
 
 function downloadPDF(){
- let client=document.getElementById("client").value || "Client";
- let level=document.getElementById("level").value;
- let msme=document.getElementById("msme")?.value || 
-          document.querySelector('input[name="msme"]:checked')?.value;
- let cat=document.getElementById("cat").value;
+  var client=document.getElementById("client").value || "Client";
+  var milestone=document.getElementById("milestone").value;
+  var msme=document.getElementById("msme").value;
+  var cat=document.getElementById("cat").value;
 
- let cleanClient=client.replace(/[^a-zA-Z0-9]/g,"_");
-
- document.title=`ZED_${level}_${msme}_${cat}_${cleanClient}`;
- window.print();
+  client=client.replace(/[^a-zA-Z0-9]/g,"_");
+  document.title="ZED_"+milestone+"_"+msme+"_"+cat+"_"+client;
+  window.print();
 }
 
 calc();
 </script>
+
+</body>
+</html>
