@@ -78,7 +78,7 @@ body{
   outline:none;
 }
 
-/* TOGGLE */
+/* TOGGLE GROUP */
 .toggle-group{
   display:flex;
   gap:10px;
@@ -115,16 +115,6 @@ th{background:#f5f6fa}
 .left{text-align:left}
 .small-table th{background:#edf7ed}
 
-/* INFO */
-.info-line{
-  margin:25px 0 10px;
-  padding:10px;
-  background:#f1fff6;
-  border-left:6px solid #2e7d32;
-  color:#2e7d32;
-  font-weight:600;
-}
-
 /* BENEFITS */
 .benefits{
   margin-top:15px;
@@ -151,9 +141,16 @@ button{
   border-radius:6px;
 }
 
+/* PRINT CLEANUP */
 @media print{
   button{display:none}
   body{background:#fff}
+
+  /* Hide unselected toggles in PDF */
+  .toggle-group label{display:none}
+  .toggle-group input:checked + label{
+    display:inline-block;
+  }
 }
 </style>
 </head>
@@ -162,6 +159,7 @@ button{
 
 <div class="box">
 
+  <!-- WATERMARK -->
   <div class="watermark">
     <img src="logo.png">
   </div>
@@ -187,24 +185,30 @@ button{
 
   <label>Certification Level</label>
   <div class="toggle-group">
-    <input type="radio" name="level" id="silver" value="Silver" checked onchange="calc()">
-    <label for="silver">Silver</label>
-    <input type="radio" name="level" id="gold" value="Gold" onchange="calc()">
-    <label for="gold">Gold</label>
+    <input type="radio" name="level" value="Silver" checked onchange="calc()">
+    <label>Silver</label>
+    <input type="radio" name="level" value="Gold" onchange="calc()">
+    <label>Gold</label>
   </div>
 
   <label>MSME Category</label>
   <div class="toggle-group">
-    <input type="radio" name="msme" value="Micro" checked onchange="calc()"> <label>Micro</label>
-    <input type="radio" name="msme" value="Small" onchange="calc()"> <label>Small</label>
-    <input type="radio" name="msme" value="Medium" onchange="calc()"> <label>Medium</label>
+    <input type="radio" name="msme" value="Micro" checked onchange="calc()">
+    <label>Micro</label>
+    <input type="radio" name="msme" value="Small" onchange="calc()">
+    <label>Small</label>
+    <input type="radio" name="msme" value="Medium" onchange="calc()">
+    <label>Medium</label>
   </div>
 
   <label>Applicant Category</label>
   <div class="toggle-group">
-    <input type="radio" name="cat" value="Male" checked onchange="calc()"> <label>General</label>
-    <input type="radio" name="cat" value="Women" onchange="calc()"> <label>Women</label>
-    <input type="radio" name="cat" value="SC" onchange="calc()"> <label>SC / ST / EWS</label>
+    <input type="radio" name="cat" value="Male" checked onchange="calc()">
+    <label>General</label>
+    <input type="radio" name="cat" value="Women" onchange="calc()">
+    <label>Women</label>
+    <input type="radio" name="cat" value="SC" onchange="calc()">
+    <label>SC / ST / EWS</label>
   </div>
 
   <!-- MAIN TABLE -->
@@ -248,10 +252,6 @@ button{
       <td id="m3">0</td>
     </tr>
   </table>
-
-  <div class="info-line">
-    Interested enterprises may share their Udyam & GST certificates via email or WhatsApp
-  </div>
 
   <!-- BENEFITS -->
   <div class="benefits" id="benefitsBox"></div>
@@ -304,8 +304,7 @@ function calc(){
 
   let b=document.getElementById("benefitsBox");
   if(level==="Silver"){
-    b.innerHTML=`
-      <h4>SILVER BENEFITS</h4>
+    b.innerHTML=`<h4>SILVER BENEFITS</h4>
       <ul>
         <li>Up to 75% subsidy (Maximum ₹50,000) for testing, management system & product certification.</li>
         <li>Up to ₹3 Lakh financial assistance for technology upgradation.</li>
@@ -313,8 +312,7 @@ function calc(){
         <li>Concession in processing fees and reduced interest rate.</li>
       </ul>`;
   }else{
-    b.innerHTML=`
-      <h4>GOLD BENEFITS</h4>
+    b.innerHTML=`<h4>GOLD BENEFITS</h4>
       <ul>
         <li>Up to 75% subsidy (Maximum ₹50,000) for testing, management system & product certification.</li>
         <li>Up to ₹3 Lakh financial assistance for technology upgradation.</li>
