@@ -67,7 +67,7 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
   <option value="SC">SC / ST / EWS</option>
 </select>
 
-<!-- MAIN EXISTING TABLE (UNCHANGED) -->
+<!-- MAIN CALCULATION TABLE (UNCHANGED) -->
 <table>
 <tr><th class="left">Particulars</th><th>Amount (₹)</th></tr>
 <tr><td class="left">Actual Cost</td><td id="actual">0</td></tr>
@@ -77,13 +77,13 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
 <tr><th class="left">Final Client Payable</th><th id="final">0</th></tr>
 </table>
 
-<!-- NEW BOTTOM SMALL TABLE (DISPLAY ONLY) -->
+<!-- BOTTOM SMALL TABLE (DISPLAY + MILESTONE) -->
 <table class="small-table">
 <tr>
   <th class="left">Central Govt Subsidy (%)</th>
   <th>Certification Cost (₹)</th>
   <th>Certification Payable (₹)</th>
-  <th colspan="2">Consulting Cost – Milestones (₹)</th>
+  <th colspan="2">Consulting Milestone Payment (₹)</th>
   <th>State Subsidy (Reimbursed)</th>
 </tr>
 
@@ -91,21 +91,21 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
   <td id="cgPercent" class="left">0%</td>
   <td id="certActual">0</td>
   <td id="certPay">0</td>
-  <td class="left">Milestone 1 (40%)</td>
+  <td class="left">Milestone-1 (40%)</td>
   <td id="m1">0</td>
   <td id="state2">0</td>
 </tr>
 
 <tr>
   <td colspan="3"></td>
-  <td class="left">Milestone 2 (30%)</td>
+  <td class="left">Milestone-2 (30%)</td>
   <td id="m2">0</td>
   <td rowspan="2"></td>
 </tr>
 
 <tr>
   <td colspan="3"></td>
-  <td class="left">Milestone 3 (30%)</td>
+  <td class="left">Milestone-3 (30%)</td>
   <td id="m3">0</td>
 </tr>
 </table>
@@ -114,7 +114,7 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
 
 <p class="note">
 Certification cost is partially / fully subsidized by Central Government.  
-Consulting payment is milestone-based.  
+Consulting payment is based on <b>client payable amount</b> and released milestone-wise.  
 State subsidy is reimbursed after successful project completion.
 </p>
 
@@ -141,7 +141,7 @@ function calc(){
   Medium:{Male:0.5,Women:1.0,SC:0.6}
  };
 
- /* ===== EXISTING CALCULATION – DO NOT TOUCH ===== */
+ /* ===== MAIN EXISTING CALCULATION (DO NOT CHANGE) ===== */
  let central = HH*hhRate[msme][cat] + cert*certRate[msme][cat];
  let balance = (HH+cert)-central;
  let state = (balance/1.18)*0.5;
@@ -156,11 +156,15 @@ function calc(){
  /* ===== ADDITIONAL DISPLAY (SAFE) ===== */
  document.getElementById("certActual").innerText=cert.toFixed(0);
  document.getElementById("certPay").innerText=(cert*(1-certRate[msme][cat])).toFixed(0);
- document.getElementById("cgPercent").innerText=(certRate[msme][cat]*100)+"%";
+ document.getElementById("cgPercent").innerText=(hhRate[msme][cat]*100)+"%";
 
- document.getElementById("m1").innerText=(HH*0.40).toFixed(0);
- document.getElementById("m2").innerText=(HH*0.30).toFixed(0);
- document.getElementById("m3").innerText=(HH*0.30).toFixed(0);
+ /* ===== FINAL CORRECT MILESTONE LOGIC ===== */
+ let consultingPayable = HH * (1 - hhRate[msme][cat]);
+
+ document.getElementById("m1").innerText=(consultingPayable*0.40).toFixed(0);
+ document.getElementById("m2").innerText=(consultingPayable*0.30).toFixed(0);
+ document.getElementById("m3").innerText=(consultingPayable*0.30).toFixed(0);
+
  document.getElementById("state2").innerText=state.toFixed(0);
 }
 calc();
