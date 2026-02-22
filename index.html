@@ -5,105 +5,28 @@
 <title>ZED Cost Calculator | Value Consulting</title>
 
 <style>
-body{
-  font-family: Arial, sans-serif;
-  background:#f4f6f8;
-}
+body{font-family:Arial;background:#f4f6f8}
+.box{max-width:900px;margin:20px auto;background:#fff;padding:20px;border-radius:10px}
 
-.box{
-  max-width:900px;
-  margin:20px auto;
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-}
+.header{display:flex;gap:15px;align-items:center;border-bottom:3px solid #f2c400;padding-bottom:10px}
+.header img{height:70px}
+.company-name{font-size:26px;font-weight:bold}
 
-/* HEADER */
-.header{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  border-bottom:3px solid #f2c400;
-  padding-bottom:10px;
-  margin-bottom:15px;
-}
-.header img{
-  height:70px;
-}
-.company-name{
-  font-size:26px;
-  font-weight:bold;
-  color:#000;
-}
-.tagline{
-  font-size:13px;
-  color:#444;
-}
+label{font-weight:bold;margin-top:10px;display:block}
+input,select{padding:8px;margin-top:5px;width:100%}
 
-/* INPUTS */
-label{
-  font-weight:bold;
-  margin-top:10px;
-  display:block;
-}
-input, select{
-  padding:8px;
-  margin-top:5px;
-  width:100%;
-  border:1px solid #ccc;
-  border-radius:4px;
-}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{border:1px solid #ccc;padding:8px;text-align:right}
+th{background:#f9f3cc}
+.left{text-align:left}
 
-/* TABLE */
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-th,td{
-  border:1px solid #ccc;
-  padding:8px;
-  text-align:right;
-}
-th{
-  background:#f9f3cc;
-}
-.left{
-  text-align:left;
-}
+.small-table{margin-top:25px;font-size:13px}
+.small-table th{background:#e9f5e1}
 
-/* BUTTON */
-button{
-  background:#f2c400;
-  color:#000;
-  border:none;
-  padding:10px 18px;
-  font-weight:bold;
-  margin-top:15px;
-  cursor:pointer;
-  border-radius:5px;
-}
-button:hover{
-  background:#e0b300;
-}
+button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-top:15px;cursor:pointer}
 
-.note{
-  font-size:12px;
-  color:#555;
-  margin-top:15px;
-}
-
-.footer{
-  margin-top:20px;
-  font-size:12px;
-  color:#777;
-  text-align:center;
-}
-
-/* PRINT SETTINGS */
-@media print{
-  button{display:none;}
-}
+.note{font-size:12px;color:#555;margin-top:15px}
+@media print{button{display:none}}
 </style>
 </head>
 
@@ -112,18 +35,17 @@ button:hover{
 
 <!-- HEADER -->
 <div class="header">
-  <img src="logo.png" alt="Value Consulting Logo">
+  <img src="logo.png">
   <div>
     <div class="company-name">VALUE CONSULTING</div>
-    <div class="tagline">ISO • ZED • Lean • MSME Certification Support</div>
+    <div>ISO • ZED • Lean • MSME Certification Support</div>
   </div>
 </div>
 
 <h3>ZED Certification Cost Calculator</h3>
 
-<!-- CLIENT DETAILS -->
 <label>Client Name</label>
-<input type="text" id="client" placeholder="Enter Client Name for Quotation">
+<input type="text" placeholder="Enter Client Name for Quotation">
 
 <label>Certification Level</label>
 <select id="level" onchange="calc()">
@@ -145,7 +67,7 @@ button:hover{
   <option value="SC">SC / ST / EWS</option>
 </select>
 
-<!-- RESULT TABLE -->
+<!-- MAIN EXISTING TABLE (UNCHANGED) -->
 <table>
 <tr><th class="left">Particulars</th><th>Amount (₹)</th></tr>
 <tr><td class="left">Actual Cost</td><td id="actual">0</td></tr>
@@ -155,16 +77,46 @@ button:hover{
 <tr><th class="left">Final Client Payable</th><th id="final">0</th></tr>
 </table>
 
+<!-- NEW BOTTOM SMALL TABLE (DISPLAY ONLY) -->
+<table class="small-table">
+<tr>
+  <th class="left">Central Govt Subsidy (%)</th>
+  <th>Certification Cost (₹)</th>
+  <th>Certification Payable (₹)</th>
+  <th colspan="2">Consulting Cost – Milestones (₹)</th>
+  <th>State Subsidy (Reimbursed)</th>
+</tr>
+
+<tr>
+  <td id="cgPercent" class="left">0%</td>
+  <td id="certActual">0</td>
+  <td id="certPay">0</td>
+  <td class="left">Milestone 1 (40%)</td>
+  <td id="m1">0</td>
+  <td id="state2">0</td>
+</tr>
+
+<tr>
+  <td colspan="3"></td>
+  <td class="left">Milestone 2 (30%)</td>
+  <td id="m2">0</td>
+  <td rowspan="2"></td>
+</tr>
+
+<tr>
+  <td colspan="3"></td>
+  <td class="left">Milestone 3 (30%)</td>
+  <td id="m3">0</td>
+</tr>
+</table>
+
 <button onclick="window.print()">Download Quotation (PDF)</button>
 
 <p class="note">
-<b>Note:</b> Subsidies are subject to approval & reimbursement by Government authorities.  
-State subsidy is calculated on eligible amount excluding GST (Balance ÷ 1.18 × 50%).
+Certification cost is partially / fully subsidized by Central Government.  
+Consulting payment is milestone-based.  
+State subsidy is reimbursed after successful project completion.
 </p>
-
-<div class="footer">
-© Value Consulting | This quotation is indicative for cost estimation purpose
-</div>
 
 </div>
 
@@ -189,6 +141,7 @@ function calc(){
   Medium:{Male:0.5,Women:1.0,SC:0.6}
  };
 
+ /* ===== EXISTING CALCULATION – DO NOT TOUCH ===== */
  let central = HH*hhRate[msme][cat] + cert*certRate[msme][cat];
  let balance = (HH+cert)-central;
  let state = (balance/1.18)*0.5;
@@ -199,11 +152,19 @@ function calc(){
  document.getElementById("bal").innerText=balance.toFixed(0);
  document.getElementById("state").innerText=state.toFixed(0);
  document.getElementById("final").innerText=final.toFixed(0);
+
+ /* ===== ADDITIONAL DISPLAY (SAFE) ===== */
+ document.getElementById("certActual").innerText=cert.toFixed(0);
+ document.getElementById("certPay").innerText=(cert*(1-certRate[msme][cat])).toFixed(0);
+ document.getElementById("cgPercent").innerText=(certRate[msme][cat]*100)+"%";
+
+ document.getElementById("m1").innerText=(HH*0.40).toFixed(0);
+ document.getElementById("m2").innerText=(HH*0.30).toFixed(0);
+ document.getElementById("m3").innerText=(HH*0.30).toFixed(0);
+ document.getElementById("state2").innerText=state.toFixed(0);
 }
 calc();
 </script>
 
 </body>
 </html>
-
-
