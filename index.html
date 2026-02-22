@@ -1,305 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>ZED Quotation | Value Consulting</title>
-
-<style>
-body{
-  font-family:"Segoe UI", Arial;
-  background:#eef1f4;
-}
-.box{
-  max-width:950px;
-  margin:20px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:10px;
-}
-
-/* LETTERHEAD */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  border-bottom:3px solid #000;
-  padding-bottom:15px;
-}
-.header-left{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-.header-left img{height:80px}
-.company-name{
-  font-size:30px;
-  font-weight:700;
-}
-.header-right{
-  font-size:13px;
-  text-align:right;
-  line-height:1.7;
-  color:#555;
-}
-
-/* TITLE */
-.title{
-  margin:20px 0 10px;
-  font-size:22px;
-  font-weight:700;
-  text-align:center;
-}
-.subtitle{
-  text-align:center;
-  font-size:13px;
-  color:#666;
-}
-
-/* FORM */
-label{
-  font-weight:600;
-  margin-top:14px;
-  display:block;
-}
-input,select{
-  padding:10px;
-  margin-top:6px;
-  width:100%;
-  border-radius:6px;
-  border:1px solid #ccc;
-  background:#fafafa;
-  font-size:14px;
-}
-
-/* TABLES */
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-th,td{
-  border:1px solid #ccc;
-  padding:9px;
-  text-align:right;
-}
-th{
-  background:#f5f6fa;
-}
-.left{text-align:left}
-.small-table th{background:#edf7ed}
-
-/* INFO LINE */
-.info-line{
-  margin:25px 0 10px;
-  padding:10px;
-  background:#f1fff6;
-  border-left:6px solid #2e7d32;
-  color:#2e7d32;
-  font-weight:600;
-}
-
-/* BENEFITS */
-.benefits{
-  margin-top:15px;
-  padding:15px;
-  background:#fafafa;
-  border-left:5px solid #f2c400;
-  page-break-inside:avoid;
-}
-.benefits h4{margin-top:0}
-.benefits ul{padding-left:18px}
-.benefits li{margin-bottom:6px}
-
-/* BUTTON */
-button{
-  background:#000;
-  color:#fff;
-  border:none;
-  padding:10px 22px;
-  font-weight:600;
-  margin-top:20px;
-  cursor:pointer;
-  border-radius:6px;
-}
-@media print{button{display:none}}
-</style>
-</head>
-
-<body>
-<div class="box">
-
-<!-- HEADER -->
-<div class="header">
-  <div class="header-left">
-    <img src="logo.png">
-    <div class="company-name">VALUE CONSULTING</div>
-  </div>
-  <div class="header-right">
-    📞 +91 98240 99027<br>
-    ✉️ value.zedmsme@gmail.com<br>
-    📍 Vadodara, Gujarat
-  </div>
-</div>
-
-<div class="title">ZED CERTIFICATION QUOTATION</div>
-<div class="subtitle">(Indicative Government Subsidy Based Commercial Offer)</div>
-
-<label>Client / Enterprise Name</label>
-<input type="text" placeholder="Enter Client Name">
-
-<label>Certification Level</label>
-<select id="level" onchange="calc()">
-  <option value="Silver">Silver Certification</option>
-  <option value="Gold">Gold Certification</option>
-</select>
-
-<label>MSME Category</label>
-<select id="msme" onchange="calc()">
-  <option value="Micro">Micro Enterprise</option>
-  <option value="Small">Small Enterprise</option>
-  <option value="Medium">Medium Enterprise</option>
-</select>
-
-<label>Applicant Category</label>
-<select id="cat" onchange="calc()">
-  <option value="Male">General (Male)</option>
-  <option value="Women">Women Entrepreneur</option>
-  <option value="SC">SC / ST / EWS</option>
-</select>
-
-<!-- MAIN QUOTATION TABLE -->
-<table>
-<tr><th class="left">Quotation Particulars</th><th>Amount (₹)</th></tr>
-<tr><td class="left">Total Project Cost</td><td id="actual">0</td></tr>
-<tr><td class="left">Eligible Central Government Subsidy</td><td id="central">0</td></tr>
-<tr><td class="left">Net Amount After Central Subsidy</td><td id="bal">0</td></tr>
-<tr><td class="left">Eligible State Government Subsidy</td><td id="state">0</td></tr>
-<tr><th class="left">Final Client Contribution</th><th id="final">0</th></tr>
-</table>
-
-<!-- MILESTONE TABLE -->
-<table class="small-table">
-<tr>
-  <th class="left">Central Subsidy %</th>
-  <th>Certification Fee</th>
-  <th>Certification Payable</th>
-  <th colspan="2">Consulting Fee – Milestone Based</th>
-  <th>State Subsidy</th>
-</tr>
-<tr>
-  <td id="cgPercent" class="left">0%</td>
-  <td id="certActual">0</td>
-  <td id="certPay">0</td>
-  <td class="left">Milestone-1 (40%)</td>
-  <td id="m1">0</td>
-  <td id="state2">0</td>
-</tr>
-<tr>
-  <td colspan="3"></td>
-  <td class="left">Milestone-2 (30%)</td>
-  <td id="m2">0</td>
-  <td rowspan="2"></td>
-</tr>
-<tr>
-  <td colspan="3"></td>
-  <td class="left">Milestone-3 (30%)</td>
-  <td id="m3">0</td>
-</tr>
-</table>
-
-<div class="info-line">
-Interested enterprises may share their Udyam Aadhar & GST certificates via email or WhatsApp
-</div>
-
-<!-- BENEFITS -->
-<div class="benefits" id="benefitsBox"></div>
-
-<button onclick="window.print()">Download Quotation (PDF)</button>
-
-</div>
-
 <script>
 function calc(){
  let level=document.getElementById("level").value;
- let msme=document.getElementById("msme").value;
+ let msme=document.getElementById("msme")?.value || 
+          document.querySelector('input[name="msme"]:checked')?.value;
  let cat=document.getElementById("cat").value;
+ let milestone=document.getElementById("milestone")?.value || level;
 
  let HH=200000;
- let cert=(level==="Silver")?32000:72000;
+ let cert={
+  Bronze:8000,
+  Silver:32000,
+  Gold:72000
+ }[milestone];
 
  let hhRate={
   Micro:{Male:0.8,Women:0.9,SC:0.9},
   Small:{Male:0.6,Women:0.7,SC:0.7},
   Medium:{Male:0.5,Women:0.6,SC:0.6}
  };
+
  let certRate={
-  Micro:{Male:0.8,Women:1,SC:0.9},
-  Small:{Male:0.6,Women:1,SC:0.7},
-  Medium:{Male:0.5,Women:1,SC:0.6}
+  Micro:{Male:0.8,Women:1.0,SC:0.9},
+  Small:{Male:0.6,Women:1.0,SC:0.7},
+  Medium:{Male:0.5,Women:1.0,SC:0.6}
  };
 
- let central=HH*hhRate[msme][cat]+cert*certRate[msme][cat];
- let balance=(HH+cert)-central;
- let state=(balance/1.18)*0.5;
- let final=balance-state;
+ let central = HH*hhRate[msme][cat] + cert*certRate[msme][cat];
+ let balance = (HH+cert)-central;
+ let state = (balance/1.18)*0.5;
+ let final = balance - state;
 
  document.getElementById("actual").innerText=(HH+cert).toFixed(0);
  document.getElementById("central").innerText=central.toFixed(0);
  document.getElementById("bal").innerText=balance.toFixed(0);
  document.getElementById("state").innerText=state.toFixed(0);
  document.getElementById("final").innerText=final.toFixed(0);
-
- document.getElementById("certActual").innerText=cert;
- document.getElementById("certPay").innerText=(cert*(1-certRate[msme][cat])).toFixed(0);
- document.getElementById("cgPercent").innerText=(hhRate[msme][cat]*100)+"%";
-
- let consult=HH*(1-hhRate[msme][cat]);
- document.getElementById("m1").innerText=(consult*0.4).toFixed(0);
- document.getElementById("m2").innerText=(consult*0.3).toFixed(0);
- document.getElementById("m3").innerText=(consult*0.3).toFixed(0);
- document.getElementById("state2").innerText=state.toFixed(0);
-
- let b=document.getElementById("benefitsBox");
- if(level==="Silver"){
-  b.innerHTML=`
-  <h4>SILVER BENEFITS</h4>
-  <ul>
-    <li>Up to 75% Subsidy (Maximum ₹50,000) for testing certification through NABL-accredited laboratories, management system certification through NABCB-accredited bodies, and product certification through BIS.</li>
-    <li>Up to ₹3 Lakh Financial Assistance for technology upgradation.</li>
-    <li>Freight Discounts for parcel transportation by Indian Railways.</li>
-    <li>Concession in Processing Fees (up to 50%) and reduced Rate of Interest (up to 1%).</li>
-    <li><b>International Expo Support:</b>
-      <ul>
-        <li>Stall Support: Up to ₹4.00 Lakh</li>
-        <li>Airfare Support: Up to ₹2.25 Lakh</li>
-      </ul>
-    </li>
-  </ul>`;
- }else{
-  b.innerHTML=`
-  <h4>GOLD BENEFITS</h4>
-  <ul>
-    <li>Up to 75% Subsidy (Maximum ₹50,000) for testing certification through NABL-accredited laboratories, management system certification through NABCB-accredited bodies, and product certification through BIS.</li>
-    <li>Up to ₹3 Lakh Financial Assistance for technology upgradation.</li>
-    <li>Freight Discounts for parcel transportation by Indian Railways.</li>
-    <li>Concession in Processing Fees (up to 75%) and reduced rate of interest (up to 1%).</li>
-    <li><b>International Expo Support:</b>
-      <ul>
-        <li>Stall Support: Up to ₹4.50 Lakh</li>
-        <li>Airfare Support: Up to ₹2.25 Lakh</li>
-      </ul>
-    </li>
-    <li><b>Freight Charges Support (IC Scheme):</b>
-      <ul>
-        <li>₹50,000 + ₹25,000 per MSME unit</li>
-        <li>Latin America: ₹75,000 + ₹25,000</li>
-      </ul>
-    </li>
-  </ul>`;
- }
 }
+
+function downloadPDF(){
+ let client=document.getElementById("client").value || "Client";
+ let level=document.getElementById("level").value;
+ let msme=document.getElementById("msme")?.value || 
+          document.querySelector('input[name="msme"]:checked')?.value;
+ let cat=document.getElementById("cat").value;
+
+ let cleanClient=client.replace(/[^a-zA-Z0-9]/g,"_");
+
+ document.title=`ZED_${level}_${msme}_${cat}_${cleanClient}`;
+ window.print();
+}
+
 calc();
 </script>
-
-</body>
-</html>
