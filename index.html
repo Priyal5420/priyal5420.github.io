@@ -67,36 +67,25 @@ body{
   color:#666;
 }
 
+/* INPUTS */
+label{font-weight:600;margin-top:14px;display:block;}
+input,select{
+  padding:10px;
+  margin-top:6px;
+  width:100%;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
 /* CLIENT NAME */
 #client{
-  width:100%;
   border:none;
   border-bottom:2px solid #000;
   font-size:18px;
   font-weight:600;
   padding:6px 2px;
   outline:none;
-}
-
-/* TOGGLE GROUP */
-.toggle-group{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:6px;
-}
-.toggle-group input{display:none}
-.toggle-group label{
-  padding:6px 16px;
-  border-radius:20px;
-  border:1px solid #ccc;
-  cursor:pointer;
-  font-size:13px;
-}
-.toggle-group input:checked + label{
-  background:#000;
-  color:#fff;
-  border-color:#000;
 }
 
 /* TABLE */
@@ -123,8 +112,6 @@ th{background:#f5f6fa}
   border-left:5px solid #f2c400;
 }
 .benefits h4{margin-top:0}
-.benefits ul{padding-left:18px}
-.benefits li{margin-bottom:6px}
 
 /* PAGE BREAK */
 .page-break{page-break-before:always}
@@ -141,16 +128,9 @@ button{
   border-radius:6px;
 }
 
-/* PRINT CLEANUP */
 @media print{
   button{display:none}
   body{background:#fff}
-
-  /* Hide unselected toggles in PDF */
-  .toggle-group label{display:none}
-  .toggle-group input:checked + label{
-    display:inline-block;
-  }
 }
 </style>
 </head>
@@ -159,12 +139,10 @@ button{
 
 <div class="box">
 
-  <!-- WATERMARK -->
   <div class="watermark">
     <img src="logo.png">
   </div>
 
-  <!-- HEADER -->
   <div class="header">
     <div class="header-left">
       <img src="logo.png">
@@ -184,32 +162,24 @@ button{
   <input type="text" id="client" placeholder="Enter Client Name">
 
   <label>Certification Level</label>
-  <div class="toggle-group">
-    <input type="radio" name="level" value="Silver" checked onchange="calc()">
-    <label>Silver</label>
-    <input type="radio" name="level" value="Gold" onchange="calc()">
-    <label>Gold</label>
-  </div>
+  <select id="level" onchange="calc()">
+    <option value="Silver">Silver</option>
+    <option value="Gold">Gold</option>
+  </select>
 
   <label>MSME Category</label>
-  <div class="toggle-group">
-    <input type="radio" name="msme" value="Micro" checked onchange="calc()">
-    <label>Micro</label>
-    <input type="radio" name="msme" value="Small" onchange="calc()">
-    <label>Small</label>
-    <input type="radio" name="msme" value="Medium" onchange="calc()">
-    <label>Medium</label>
-  </div>
+  <select id="msme" onchange="calc()">
+    <option value="Micro">Micro</option>
+    <option value="Small">Small</option>
+    <option value="Medium">Medium</option>
+  </select>
 
   <label>Applicant Category</label>
-  <div class="toggle-group">
-    <input type="radio" name="cat" value="Male" checked onchange="calc()">
-    <label>General</label>
-    <input type="radio" name="cat" value="Women" onchange="calc()">
-    <label>Women</label>
-    <input type="radio" name="cat" value="SC" onchange="calc()">
-    <label>SC / ST / EWS</label>
-  </div>
+  <select id="cat" onchange="calc()">
+    <option value="Male">General</option>
+    <option value="Women">Women</option>
+    <option value="SC">SC / ST / EWS</option>
+  </select>
 
   <!-- MAIN TABLE -->
   <table>
@@ -262,9 +232,9 @@ button{
 
 <script>
 function calc(){
-  let level=document.querySelector('input[name="level"]:checked').value;
-  let msme=document.querySelector('input[name="msme"]:checked').value;
-  let cat=document.querySelector('input[name="cat"]:checked').value;
+  let level=document.getElementById("level").value;
+  let msme=document.getElementById("msme").value;
+  let cat=document.getElementById("cat").value;
 
   let HH=200000;
   let cert=(level==="Silver")?32000:72000;
@@ -303,22 +273,42 @@ function calc(){
   document.getElementById("state2").innerText=state.toFixed(0);
 
   let b=document.getElementById("benefitsBox");
+
   if(level==="Silver"){
-    b.innerHTML=`<h4>SILVER BENEFITS</h4>
+    b.innerHTML = `
+      <h4>SILVER BENFITE</h4>
       <ul>
-        <li>Up to 75% subsidy (Maximum ₹50,000) for testing, management system & product certification.</li>
-        <li>Up to ₹3 Lakh financial assistance for technology upgradation.</li>
-        <li>Freight discounts for parcel transportation by Indian Railways.</li>
-        <li>Concession in processing fees and reduced interest rate.</li>
+        <li>Up to 75% Subsidy (Maximum ₹50,000) for testing certification through NABL-accredited laboratories, management system certification through NABCB-accredited bodies, and product certification through BIS.</li>
+        <li>Up to ₹3 Lakh Financial Assistance for technology upgradation.</li>
+        <li>Freight Discounts for parcel transportation by Indian Railways.</li>
+        <li>Concession in Processing Fees (up to 50%) and reduced Rate of Interest (up to 1%) by banks and financial institutions.</li>
+        <li>Incentive Support for International Expos:
+          <ul>
+            <li>Stall Support: Up to ₹4.00 Lakh</li>
+            <li>Airfare Support: Up to ₹2.25 Lakh</li>
+          </ul>
+        </li>
       </ul>`;
   }else{
-    b.innerHTML=`<h4>GOLD BENEFITS</h4>
+    b.innerHTML = `
+      <h4>GOLD BENIFITE</h4>
       <ul>
-        <li>Up to 75% subsidy (Maximum ₹50,000) for testing, management system & product certification.</li>
-        <li>Up to ₹3 Lakh financial assistance for technology upgradation.</li>
-        <li>Freight discounts for parcel transportation by Indian Railways.</li>
-        <li>Concession in processing fees and reduced interest rate.</li>
-        <li>International Expo & IC Scheme freight support.</li>
+        <li>Up to 75% Subsidy (Maximum ₹50,000) for testing certification through NABL-accredited laboratories, management system certification through NABCB-accredited bodies, and product certification through BIS.</li>
+        <li>Up to ₹3 Lakh Financial Assistance for technology upgradation.</li>
+        <li>Freight Discounts for parcel transportation by Indian Railways.</li>
+        <li>Concession in Processing Fees (up to 75%) and reduced rate of interest (up to 1%) by banks and financial institutions.</li>
+        <li>Incentive Support for International Expos:
+          <ul>
+            <li>Stall Support: Up to ₹4.50 Lakh</li>
+            <li>Airfare Support: Up to ₹2.25 Lakh</li>
+          </ul>
+        </li>
+        <li>Freight Charges Support under International Cooperation (IC) Scheme:
+          <ul>
+            <li>Actuals subject to a maximum of ₹50,000 + ₹25,000 per MSME unit</li>
+            <li>For Latin American countries: Up to ₹75,000 + ₹25,000 per MSME unit</li>
+          </ul>
+        </li>
       </ul>`;
   }
 }
