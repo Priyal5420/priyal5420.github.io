@@ -25,7 +25,16 @@ th{background:#f9f3cc}
 
 button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-top:15px;cursor:pointer}
 
-.note{font-size:12px;color:#555;margin-top:15px}
+.benefits{
+  margin-top:25px;
+  padding:15px;
+  background:#f9f9f9;
+  border-left:5px solid #f2c400;
+}
+.benefits h4{margin-top:0}
+.benefits ul{padding-left:18px}
+.benefits li{margin-bottom:6px;font-size:14px}
+
 @media print{button{display:none}}
 </style>
 </head>
@@ -38,7 +47,7 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
   <img src="logo.png">
   <div>
     <div class="company-name">VALUE CONSULTING</div>
-    <div>ISO • ZED • Lean • MSME Certification Support</div>
+    <div>ISO • ZED • Lean</div>
   </div>
 </div>
 
@@ -67,7 +76,7 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
   <option value="SC">SC / ST / EWS</option>
 </select>
 
-<!-- MAIN CALCULATION TABLE (UNCHANGED) -->
+<!-- MAIN CALCULATION TABLE -->
 <table>
 <tr><th class="left">Particulars</th><th>Amount (₹)</th></tr>
 <tr><td class="left">Actual Cost</td><td id="actual">0</td></tr>
@@ -77,7 +86,7 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
 <tr><th class="left">Final Client Payable</th><th id="final">0</th></tr>
 </table>
 
-<!-- BOTTOM SMALL TABLE (DISPLAY + MILESTONE) -->
+<!-- SMALL TABLE -->
 <table class="small-table">
 <tr>
   <th class="left">Central Govt Subsidy (%)</th>
@@ -86,7 +95,6 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
   <th colspan="2">Consulting Milestone Payment (₹)</th>
   <th>State Subsidy (Reimbursed)</th>
 </tr>
-
 <tr>
   <td id="cgPercent" class="left">0%</td>
   <td id="certActual">0</td>
@@ -95,14 +103,12 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
   <td id="m1">0</td>
   <td id="state2">0</td>
 </tr>
-
 <tr>
   <td colspan="3"></td>
   <td class="left">Milestone-2 (30%)</td>
   <td id="m2">0</td>
   <td rowspan="2"></td>
 </tr>
-
 <tr>
   <td colspan="3"></td>
   <td class="left">Milestone-3 (30%)</td>
@@ -110,13 +116,10 @@ button{background:#f2c400;border:none;padding:10px 18px;font-weight:bold;margin-
 </tr>
 </table>
 
-<button onclick="window.print()">Download Quotation (PDF)</button>
+<!-- BENEFITS -->
+<div class="benefits" id="benefitsBox"></div>
 
-<p class="note">
-Certification cost is partially / fully subsidized by Central Government.  
-Consulting payment is based on <b>client payable amount</b> and released milestone-wise.  
-State subsidy is reimbursed after successful project completion.
-</p>
+<button onclick="window.print()">Download Quotation (PDF)</button>
 
 </div>
 
@@ -141,7 +144,7 @@ function calc(){
   Medium:{Male:0.5,Women:1.0,SC:0.6}
  };
 
- /* ===== MAIN EXISTING CALCULATION (DO NOT CHANGE) ===== */
+ /* CORE CALCULATION (UNCHANGED) */
  let central = HH*hhRate[msme][cat] + cert*certRate[msme][cat];
  let balance = (HH+cert)-central;
  let state = (balance/1.18)*0.5;
@@ -153,19 +156,56 @@ function calc(){
  document.getElementById("state").innerText=state.toFixed(0);
  document.getElementById("final").innerText=final.toFixed(0);
 
- /* ===== ADDITIONAL DISPLAY (SAFE) ===== */
- document.getElementById("certActual").innerText=cert.toFixed(0);
+ /* DISPLAY */
+ document.getElementById("certActual").innerText=cert;
  document.getElementById("certPay").innerText=(cert*(1-certRate[msme][cat])).toFixed(0);
  document.getElementById("cgPercent").innerText=(hhRate[msme][cat]*100)+"%";
 
- /* ===== FINAL CORRECT MILESTONE LOGIC ===== */
  let consultingPayable = HH * (1 - hhRate[msme][cat]);
-
  document.getElementById("m1").innerText=(consultingPayable*0.40).toFixed(0);
  document.getElementById("m2").innerText=(consultingPayable*0.30).toFixed(0);
  document.getElementById("m3").innerText=(consultingPayable*0.30).toFixed(0);
-
  document.getElementById("state2").innerText=state.toFixed(0);
+
+ /* BENEFITS SWITCH */
+ let b=document.getElementById("benefitsBox");
+ if(level==="Silver"){
+  b.innerHTML=`
+  <h4>SILVER BENEFITS</h4>
+  <ul>
+    <li>Up to 75% Subsidy (Maximum ₹50,000) for testing certification through NABL-accredited laboratories, management system certification through NABCB-accredited bodies, and product certification through BIS.</li>
+    <li>Up to ₹3 Lakh Financial Assistance for technology upgradation.</li>
+    <li>Freight Discounts for parcel transportation by Indian Railways.</li>
+    <li>Concession in Processing Fees (up to 50%) and reduced Rate of Interest (up to 1%) by banks and financial institutions.</li>
+    <li><b>Incentive Support for International Expos:</b>
+      <ul>
+        <li>Stall Support: Up to ₹4.00 Lakh</li>
+        <li>Airfare Support: Up to ₹2.25 Lakh</li>
+      </ul>
+    </li>
+  </ul>`;
+ }else{
+  b.innerHTML=`
+  <h4>GOLD BENEFITS</h4>
+  <ul>
+    <li>Up to 75% Subsidy (Maximum ₹50,000) for testing certification through NABL-accredited laboratories, management system certification through NABCB-accredited bodies, and product certification through BIS.</li>
+    <li>Up to ₹3 Lakh Financial Assistance for technology upgradation.</li>
+    <li>Freight Discounts for parcel transportation by Indian Railways.</li>
+    <li>Concession in Processing Fees (up to 75%) and reduced rate of interest (up to 1%) by banks and financial institutions.</li>
+    <li><b>Incentive Support for International Expos:</b>
+      <ul>
+        <li>Stall Support: Up to ₹4.50 Lakh</li>
+        <li>Airfare Support: Up to ₹2.25 Lakh</li>
+      </ul>
+    </li>
+    <li><b>Freight Charges Support under International Cooperation (IC) Scheme:</b>
+      <ul>
+        <li>Actuals subject to a maximum of ₹50,000 + ₹25,000 per MSME unit</li>
+        <li>For Latin American countries: Up to ₹75,000 + ₹25,000 per MSME unit</li>
+      </ul>
+    </li>
+  </ul>`;
+ }
 }
 calc();
 </script>
